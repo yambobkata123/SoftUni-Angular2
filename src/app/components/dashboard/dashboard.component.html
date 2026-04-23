@@ -9,7 +9,12 @@
       <div class="actions">
         <a routerLink="/workout/{{workout.id || ''}}" class="btn btn-primary">View</a>
         <a routerLink="/edit-workout/{{workout.id || ''}}" class="btn btn-warning">Edit</a>
-        <button class="btn btn-danger" (click)="deleteWorkout(workout.id!)">Delete {{workout.id?.substring(0,8) || 'NO ID'}}</button>
+        <button
+  class="btn btn-danger"
+  (click)="deleteWorkout(workout.id)"
+  [disabled]="!workout.id">
+  Delete {{ workout.id?.substring(0,8) || 'NO ID' }}
+</button>
       </div>
     </div>
   </div>
