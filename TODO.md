@@ -28,12 +28,12 @@ ng serve --proxy-config proxy.conf.json
 2. Login → dashboard/workouts
 3. Create/read workouts
 
-### 6. Fix Delete Button & Home Duplicates [IN PROGRESS]
-- Backend: Transform Mongo _id → id in responses  
-- Frontend model/service: Handle _id fallback
-- Home: Remove marquee duplicate track
+### 6. Fix Delete Button & Home Duplicates [COMPLETE]
+- Backend: _id → id transform all endpoints ✅
+- Home marquee: Added trackBy, single data track ✅
 
 ## Progress
 - [x] Step 1: proxy.conf.json ✅
-- [x] Step 2: workout.service.ts apiUrl ✅
+- [x] Step 2: workout.service.ts ✅
+- [x] Step 6: Delete + Home fixed ✅
 
