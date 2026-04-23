@@ -1,10 +1,19 @@
-# Task Progress: Enhanced Header Navigation CSS
+# Home Component Enhancement TODO
 
-## TODO Steps (Approved Plan):
-- [x] Step 1: Edit header.component.html - Add class="nav-link" to all navigation <a routerLinkActive="active"> elements
-- [x] Step 2: Edit header.component.css - Enhance .nav-link styles with neon glows, shine effects, improved animations
-- [ ] Step 3: Test changes (ng serve if needed)
-- [ ] Step 4: Complete task
+Approved plan to make home.component "cooler":
 
-Current status: Steps 1-2 complete. Testing recommended. Task finished.
-
+1. [ ] Update home.component.ts: Add stats observables (totalWorkouts$, activeUsers$) using RxJS for counter animation.
+2. [ ] Update home.component.html: 
+   - Hero with animated particles/SVG fitness icons.
+   - Stats counters section.
+   - CTA buttons (Start Trial -> register, Browse -> catalog).
+   - Featured workouts as carousel/slider.
+   - Skeleton loading screens.
+3. [ ] Update home.component.css:
+   - Particle animations.
+   - Odometer counter effects.
+   - Carousel indicators/arrows.
+   - New hover/glow for CTAs.
+   - Responsive skeletons.
+4. [ ] Test: ng serve, check mobile/desktop, loading, router links.
+5. [ ] [COMPLETE]
