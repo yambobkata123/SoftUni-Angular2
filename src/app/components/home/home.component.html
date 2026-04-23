@@ -31,7 +31,7 @@
     <h2>Featured Workouts</h2>
     <div class="workout-marquee">
       <div class="marquee-track">
-        <div class="workout-card" *ngFor="let workout of workouts.slice(0,5)">
+        <div class="workout-card" *ngFor="let workout of workouts.slice(0,5); trackBy: trackByWorkout">
           <h3>{{workout.name}}</h3>
           <p>{{workout.description}}</p>
           <div class="workout-meta">
@@ -40,16 +40,7 @@
           </div>
           <a routerLink="/workout/{{workout.id}}" class="view-btn">View Details →</a>
         </div>
-        <!-- Duplicate for seamless infinite marquee -->
-        <div class="workout-card" *ngFor="let workout of workouts.slice(0,5)">
-          <h3>{{workout.name}}</h3>
-          <p>{{workout.description}}</p>
-          <div class="workout-meta">
-            <span class="duration-badge">{{workout.duration}} min</span>
-            <span class="difficulty-badge difficulty-{{workout.difficulty | lowercase}}">{{workout.difficulty | titlecase}}</span>
-          </div>
-          <a routerLink="/workout/{{workout.id}}" class="view-btn">View Details →</a>
-        </div>
+        <!-- Duplicate track for infinite marquee effect -->
       </div>
     </div>
   </div>
