@@ -28,12 +28,12 @@ ng serve --proxy-config proxy.conf.json
 2. Login → dashboard/workouts
 3. Create/read workouts
 
-### 6. Fix Delete Button & Home Duplicates [COMPLETE]
-- Backend: _id → id transform all endpoints ✅
-- Home marquee: Added trackBy, single data track ✅
+### 7. Fix Edit Button
+- Added *ngIf="workout.id" to Edit/Delete buttons
+- Added ID validation in deleteWorkout()
+- workout-form handles both create/edit
 
 ## Progress
-- [x] Step 1: proxy.conf.json ✅
-- [x] Step 2: workout.service.ts ✅
-- [x] Step 6: Delete + Home fixed ✅
+- [x] Step 1-2,6 ✅
+- [x] Step 7: Edit button fixed ✅
 
