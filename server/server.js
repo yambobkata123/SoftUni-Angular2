@@ -80,20 +80,35 @@ app.post('/api/auth/login', async function(req, res) {
 
 app.get('/api/workouts', async function(req, res) {
   const workouts = await Workout.find();
-  res.json(workouts);
+  const workoutsWithId = workouts.map(w => {
+    const workoutObj = w.toObject();
+    workoutObj.id = workoutObj._id.toString();
+    delete workoutObj._id;
+    delete workoutObj.__v;
+    return workoutObj;
+  });
+  res.json(workoutsWithId);
 });
 
 app.get('/api/workouts/:id', async function(req, res) {
   const workout = await Workout.findById(req.params.id);
   if (!workout) return res.status(404).json({ error: 'Workout not found' });
-  res.json(workout);
+  const workoutObj = workout.toObject();
+  workoutObj.id = workoutObj._id.toString();
+  delete workoutObj._id;
+  delete workoutObj.__v;
+  res.json(workoutObj);
 });
 
 app.post('/api/workouts', authMiddleware, async function(req, res) {
   try {
     const workout = new Workout({ ...req.body, ownerId: req.user.id });
     await workout.save();
-    res.status(201).json(workout);
+    const workoutObj = workout.toObject();
+    workoutObj.id = workoutObj._id.toString();
+    delete workoutObj._id;
+    delete workoutObj.__v;
+    res.status(201).json(workoutObj);
   } catch (err) {
     res.status(400).json({ error: 'Create failed' });
   }
@@ -105,7 +120,11 @@ app.patch('/api/workouts/:id', authMiddleware, async function(req, res) {
     if (!workout || workout.ownerId !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
     Object.assign(workout, req.body);
     await workout.save();
-    res.json(workout);
+    const workoutObj = workout.toObject();
+    workoutObj.id = workoutObj._id.toString();
+    delete workoutObj._id;
+    delete workoutObj.__v;
+    res.json(workoutObj);
   } catch (err) {
     res.status(400).json({ error: 'Update failed' });
   }
