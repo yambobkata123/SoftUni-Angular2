@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   private workoutService = inject(WorkoutService);
   private authService = inject(AuthService);
   myWorkouts$!: Observable<Workout[]>;
+  debugWorkouts: any[] = [];
 
   ngOnInit() {
     const userId = this.authService.getCurrentUser()?.id || '';

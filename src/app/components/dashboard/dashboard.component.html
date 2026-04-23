@@ -5,7 +5,7 @@
     <div class="workout-card" *ngFor="let workout of workouts">
       <h3>{{workout.name}}</h3>
       <p>{{workout.description}}</p>
-      <p>{{workout.difficulty | difficulty}} | {{workout.duration}} min</p>
+<p>{{workout.difficulty | difficulty}} | {{workout.duration}} min | ID: {{workout.id || 'MISSING'}}</p>
       <div class="actions">
         <a routerLink="/workout/{{workout.id || ''}}" class="btn btn-primary">View</a>
         <a routerLink="/edit-workout/{{workout.id || ''}}" class="btn btn-warning">Edit</a>
