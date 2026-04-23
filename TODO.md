@@ -2,7 +2,7 @@
 
 Approved plan to make home.component "cooler":
 
-1. [ ] Update home.component.ts: Add stats observables (totalWorkouts$, activeUsers$) using RxJS for counter animation.
+1. [x] Update home.component.ts: Add stats observables (totalWorkouts$, activeUsers$) using RxJS for counter animation.
 2. [ ] Update home.component.html: 
    - Hero with animated particles/SVG fitness icons.
    - Stats counters section.
