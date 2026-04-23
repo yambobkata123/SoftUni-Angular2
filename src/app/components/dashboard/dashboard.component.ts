@@ -29,6 +29,10 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteWorkout(id: string) {
+    if (!id) {
+      alert('Invalid workout ID');
+      return;
+    }
     if (confirm('Are you sure you want to delete this workout?')) {
       this.workoutService.delete(id).subscribe({
         next: () => {
