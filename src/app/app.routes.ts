@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WorkoutFormComponent } from './components/workout-form/workout-form.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { authGuard } from './guards/auth.guard';
 import { noAuthGuard } from './guards/no-auth.guard';
 
@@ -20,5 +21,5 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'create-workout', component: WorkoutFormComponent, canActivate: [authGuard] },
   { path: 'edit-workout/:id', component: WorkoutFormComponent, canActivate: [authGuard] },
-  { path: '**', redirectTo: 'home' }
+{ path: '**', component: NotFoundComponent }
 ];
