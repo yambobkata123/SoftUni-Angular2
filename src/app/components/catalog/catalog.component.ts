@@ -6,7 +6,7 @@ import { Workout } from '../../models/workout';
 import { DifficultyPipe } from '../../pipes/difficulty.pipe';
 import { AsyncPipe } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -20,12 +20,16 @@ export class CatalogComponent {
   workoutService = inject(WorkoutService);
   searchCtrl = new FormControl('');
 
+  allWorkouts$ = this.workoutService.getAll();
+  
   filteredWorkouts$ = this.searchCtrl.valueChanges.pipe(
+    startWith(''),
     debounceTime(300),
     distinctUntilChanged(),
-    switchMap(search => this.workoutService.getAll().pipe(
-      map((workouts: Workout[]) => workouts.filter(w => 
-        w.name.toLowerCase().includes((search || '').toLowerCase())
+    switchMap(search => this.allWorkouts$.pipe(
+      map(workouts => workouts.filter(w => 
+        w.name.toLowerCase().includes(search?.toLowerCase() || '') ||
+        w.description.toLowerCase().includes(search?.toLowerCase() || '')
       ))
     ))
   ) as Observable<Workout[]>;
