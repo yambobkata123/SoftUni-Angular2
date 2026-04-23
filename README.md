@@ -106,5 +106,3 @@ App opens at `http://localhost:4200`
 **Test accounts:** 
 - Email: `test@test.com` Password: `123456`
 - Register new user anytime
-
-**Development complete - Ready for exam!** 🚀
