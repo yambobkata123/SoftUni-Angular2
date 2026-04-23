@@ -26,8 +26,8 @@ export class HomeComponent {
   activeUsers$ = new BehaviorSubject<number>(0);
 
   ngOnInit(): void {
-    this.animateCounter(150, this.totalWorkouts$);
-    this.animateCounter(5234, this.activeUsers$);
+    this.animateCounter(16, this.totalWorkouts$);
+    this.animateCounter(5267, this.activeUsers$);
   }
 
   ngOnDestroy(): void {
