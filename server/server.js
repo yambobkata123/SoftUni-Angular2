@@ -37,17 +37,31 @@ const workoutSchema = new mongoose.Schema({
 const Workout = mongoose.model('Workout', workoutSchema);
 
 // Middleware for auth
-const authMiddleware = function(req, res, next) {
-  const token = req.header('Authorization') && req.header('Authorization').replace('Bearer ', '');
-  if (!token) return res.status(401).json({ error: 'No token' });
+const authMiddleware = function (req, res, next) {
+  const authHeader = req.header('Authorization');
+
+  if (!authHeader) {
+    return res.status(401).json({ error: 'No token' });
+  }
+
+  const token = authHeader.replace('Bearer ', '');
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+
+    // 🔥 normalize user id (VERY IMPORTANT)
+    req.user = {
+      id: decoded.id || decoded._id || decoded.userId
+    };
+
     next();
   } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
+    console.error('JWT ERROR:', err.message);
+    return res.status(401).json({ error: 'Invalid token' });
   }
 };
+
+module.exports = authMiddleware;
 
 // Routes
 app.post('/api/auth/register', async function(req, res) {
@@ -131,14 +145,28 @@ app.patch('/api/workouts/:id', authMiddleware, async function(req, res) {
   }
 });
 
-app.delete('/api/workouts/:id', authMiddleware, async function(req, res) {
+app.delete('/api/workouts/:id', authMiddleware, async (req, res) => {
   try {
     const workout = await Workout.findById(req.params.id);
-    if (!workout || workout.ownerId !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
+
+    if (!workout) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    // 🔍 Add these two lines
+    console.log('workout.ownerId:', workout.ownerId, typeof workout.ownerId);
+    console.log('req.user.id:', req.user.id, typeof req.user.id);
+
+    if (workout.ownerId.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
     await Workout.deleteOne({ _id: req.params.id });
     res.json({ message: 'Deleted' });
+
   } catch (err) {
-    res.status(400).json({ error: 'Delete failed' });
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
