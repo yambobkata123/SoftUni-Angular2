@@ -28,9 +28,9 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  deleteWorkout(id: string) {
+  deleteWorkout(id: string | undefined) {
     if (!id) {
-      alert('Invalid workout ID');
+      console.error('No ID for delete');
       return;
     }
     if (confirm('Are you sure you want to delete this workout?')) {
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
             map(workouts => workouts.filter(w => w.ownerId === userId))
           );
         },
-        error: (err) => alert('Delete failed: ' + err.message)
+        error: (err) => console.error('Delete error:', err)
       });
     }
   }
