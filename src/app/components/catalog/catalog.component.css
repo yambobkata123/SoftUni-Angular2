@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.catalog {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.catalog h1 {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.search input {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  font-size: 1.2rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  font-family: inherit;
+}
+
+.search input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+}
+
+.search input::placeholder {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.workout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 2.5rem;
+}
+
+.workout-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.workout-card:nth-child(1) { animation-delay: 0.1s; }
+.workout-card:nth-child(2) { animation-delay: 0.2s; }
+.workout-card:nth-child(3) { animation-delay: 0.3s; }
+
+.workout-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 35px 70px rgba(0,0,0,0.25);
+}
+
+.workout-card h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.workout-card p {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.workout-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.difficulty-badge {
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.difficulty-easy { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+.difficulty-medium { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+.difficulty-hard { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+a:hover::before {
+  left: 100%;
+}
+
+a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.5);
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6b7280;
+  font-size: 1.3rem;
+}
+
+.no-results::before {
+  content: '🔍';
+  display: block;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .workout-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .catalog h1 {
+    font-size: 2.2rem;
+  }
+  
+  .workout-card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog {
+    padding: 1.5rem 1rem;
+  }
+}

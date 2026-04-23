@@ -1,0 +1,41 @@
+{
+  "workouts": [
+    {
+      "id": "1",
+      "name": "Full Body Workout",
+      "description": "A complete full body workout routine for beginners.",
+      "duration": 45,
+      "difficulty": "medium",
+      "ownerId": "guest",
+      "createdAt": "2024-04-01T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Cardio Blast",
+      "description": "High intensity cardio session to burn fat.",
+      "duration": 30,
+      "difficulty": "hard",
+      "ownerId": "guest",
+      "createdAt": "2024-04-02T12:00:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Yoga Flow",
+      "description": "Relaxing yoga session for flexibility.",
+      "duration": 60,
+      "difficulty": "easy",
+      "ownerId": "user1",
+      "createdAt": "2024-04-03T15:00:00Z"
+    },
+    {
+      "id": "4",
+      "name": "Upper Body Strength",
+      "description": "Focus on chest, back, shoulders.",
+      "duration": 50,
+      "difficulty": "medium",
+      "ownerId": "user2",
+      "createdAt": "2024-04-04T09:00:00Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

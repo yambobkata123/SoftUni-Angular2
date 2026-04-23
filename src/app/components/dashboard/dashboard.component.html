@@ -1,0 +1,19 @@
+<div class="dashboard">
+  <h1>My Dashboard</h1>
+  <a routerLink="/create-workout" class="btn btn-primary">Create New Workout</a>
+  <div class="workout-grid" *ngIf="myWorkouts$ | async as workouts; else empty">
+    <div class="workout-card" *ngFor="let workout of workouts">
+      <h3>{{workout.name}}</h3>
+      <p>{{workout.description}}</p>
+      <p>{{workout.difficulty | difficulty}} | {{workout.duration}} min</p>
+      <div class="actions">
+        <a routerLink="/workout/{{workout.id}}" class="btn btn-primary">View</a>
+        <a routerLink="/edit-workout/{{workout.id}}" class="btn btn-warning">Edit</a>
+        <button class="btn btn-danger" (click)="deleteWorkout(workout.id!)">Delete</button>
+      </div>
+    </div>
+  </div>
+  <ng-template #empty>
+    <p>No workouts yet. <a routerLink="/create-workout">Create one</a></p>
+  </ng-template>
+</div>

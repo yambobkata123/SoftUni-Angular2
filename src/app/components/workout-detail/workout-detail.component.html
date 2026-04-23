@@ -1,0 +1,11 @@
+<div class="detail" *ngIf="workout$ | async as workout; else loading">
+  <h1>{{workout.name}}</h1>
+  <p>{{workout.description}}</p>
+  <p>Duration: {{workout.duration}} min</p>
+  <p>{{workout.difficulty | difficulty}}</p>
+  <p>Created: {{workout.createdAt | date:'short'}}</p>
+  <a routerLink="/catalog">← Back to Catalog</a>
+</div>
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

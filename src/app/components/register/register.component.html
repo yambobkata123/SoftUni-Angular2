@@ -1,0 +1,28 @@
+<div class="register-wrapper">
+  <div class="auth-container">
+    <h1>📝 Join Fitness Bobi</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input id="email" formControlName="email" type="email" />
+        <label for="email">Email Address</label>
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+          Please enter a valid email address
+        </div>
+      </div>
+      <div class="form-group">
+        <input id="password" formControlName="password" type="password" />
+        <label for="password">Password</label>
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+          Password must be at least 6 characters
+        </div>
+      </div>
+      <button type="submit" [disabled]="registerForm.invalid || loading">
+        {{ loading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+      <p *ngIf="error" class="error">{{error}}</p>
+      <div class="links">
+        <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+      </div>
+    </form>
+  </div>
+</div>

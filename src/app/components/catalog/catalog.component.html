@@ -1,0 +1,17 @@
+<div class="catalog">
+  <h1>Workouts Catalog</h1>
+  <div class="search">
+    <input [formControl]="searchCtrl" placeholder="Search workouts..." />
+  </div>
+  <div class="workout-grid" *ngIf="filteredWorkouts$ | async as workouts; else empty">
+    <div class="workout-card" *ngFor="let workout of workouts">
+      <h3>{{workout.name}}</h3>
+      <p>{{workout.description}}</p>
+      <p>Duration: {{workout.duration}} min | {{workout.difficulty | difficulty}} | Created: {{workout.createdAt | date:'short'}}</p>
+      <a routerLink="/workout/{{workout.id}}">View Details</a>
+    </div>
+  </div>
+  <ng-template #empty>
+    <p>No workouts found.</p>
+  </ng-template>
+</div>

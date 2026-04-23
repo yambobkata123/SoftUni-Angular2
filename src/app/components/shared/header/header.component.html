@@ -1,0 +1,25 @@
+<header class="header">
+  <nav class="nav">
+    <a routerLink="/home" class="logo" routerLinkActive="active">
+      💪 Fitness by Bobi
+    </a>
+    <div class="nav-links">
+<a routerLink="/home" class="nav-link" routerLinkActive="active">🏠 Home</a>
+<a routerLink="/catalog" class="nav-link" routerLinkActive="active">📋 Catalog</a>
+      <ng-container *ngIf="isLoggedIn; else guestNav">
+<a routerLink="/dashboard" class="nav-link" routerLinkActive="active">📊 Dashboard</a>
+<a routerLink="/create-workout" class="nav-link" routerLinkActive="active">➕ Create</a>
+        <div class="user-info">
+          <span class="welcome">👋 {{ userEmail }}</span>
+          <button class="logout-btn" (click)="logout()">Logout</button>
+        </div>
+      </ng-container>
+      <ng-template #guestNav>
+        <div class="guest-links">
+<a routerLink="/login" class="nav-link" routerLinkActive="active">🔐 Login</a>
+<a routerLink="/register" class="nav-link" routerLinkActive="active">📝 Register</a>
+        </div>
+      </ng-template>
+    </div>
+  </nav>
+</header>

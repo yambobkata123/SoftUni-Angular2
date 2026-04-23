@@ -1,0 +1,28 @@
+<div class="login-wrapper">
+  <div class="auth-container">
+    <h1>🔐 Welcome Back</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input id="email" formControlName="email" type="email" />
+        <label for="email">Email Address</label>
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+          Please enter a valid email address
+        </div>
+      </div>
+      <div class="form-group">
+        <input id="password" formControlName="password" type="password" />
+        <label for="password">Password</label>
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+          Password must be at least 6 characters
+        </div>
+      </div>
+      <button type="submit" [disabled]="loginForm.invalid || loading">
+        {{ loading ? 'Signing In...' : 'Sign In' }}
+      </button>
+      <p *ngIf="error" class="error">{{error}}</p>
+      <div class="links">
+        <p>Don't have an account? <a routerLink="/register">Create one now</a></p>
+      </div>
+    </form>
+  </div>
+</div>
