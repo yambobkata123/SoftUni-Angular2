@@ -1,0 +1,21 @@
+<div class="cookie-banner" *ngIf="showBanner" @fadeSlideInOut>
+  <div class="cookie-content">
+    <div class="cookie-icon">🍪</div>
+    <div class="cookie-text">
+      <h3>Ние използваме бисквитки</h3>
+      <p>
+        Този сайт използва бисквитки, за да подобри вашето изживяване. 
+        Чрез натискане на "Приемам", вие се съгласявате с използването на бисквитки за запазване на предпочитанията и подобряване на функционалността.
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button class="btn btn-decline" (click)="declineCookies()">
+        <span>❌</span> Отказвам
+      </button>
+      <button class="btn btn-accept" (click)="acceptCookies()">
+        <span>✅</span> Приемам
+      </button>
+    </div>
+  </div>
+</div>
+
