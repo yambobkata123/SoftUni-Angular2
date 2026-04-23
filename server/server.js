@@ -22,7 +22,10 @@ mongoose.connect(process.env.MONGODB_URI)
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  id: { type: String, default: function() { return Math.random().toString(36).substr(2, 9); } }
+  customId: {                                          // ✅ renamed from "id" to avoid Mongoose _id clash
+    type: String,
+    default: function() { return Math.random().toString(36).substr(2, 9); }
+  }
 });
 const User = mongoose.model('User', userSchema);
 
@@ -36,7 +39,7 @@ const workoutSchema = new mongoose.Schema({
 });
 const Workout = mongoose.model('Workout', workoutSchema);
 
-// Middleware for auth
+// Auth Middleware
 const authMiddleware = function (req, res, next) {
   const authHeader = req.header('Authorization');
 
@@ -48,12 +51,14 @@ const authMiddleware = function (req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // 🔥 normalize user id (VERY IMPORTANT)
-    req.user = {
-      id: decoded.id || decoded._id || decoded.userId
-    };
-
+    
+    console.log('=== DECODED JWT ===', decoded); // виж какво има
+    
+    // ✅ поддържа и стари токени ({ id }) и нови ({ customId })
+    req.user = { id: decoded.customId || decoded.id };
+    
+    console.log('req.user.id:', req.user.id);
+    
     next();
   } catch (err) {
     console.error('JWT ERROR:', err.message);
@@ -61,23 +66,29 @@ const authMiddleware = function (req, res, next) {
   }
 };
 
-module.exports = authMiddleware;
-
-// Routes
+// Register
 app.post('/api/auth/register', async function(req, res) {
   try {
     const { email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ email, password: hashedPassword });
     await user.save();
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ id: user.id, email: user.email, token });
+
+    console.log('Registered user customId:', user.customId); // ✅ debug
+
+    const token = jwt.sign(
+      { customId: user.customId },                    // ✅ sign with customId
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.json({ id: user.customId, email: user.email, token });
   } catch (err) {
     console.log(err);
     res.status(400).json({ error: 'User exists or invalid data' });
   }
 });
 
+// Login
 app.post('/api/auth/login', async function(req, res) {
   try {
     const { email, password } = req.body;
@@ -85,13 +96,21 @@ app.post('/api/auth/login', async function(req, res) {
     if (!user || !await bcrypt.compare(password, user.password)) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ id: user.id, email: user.email, token });
+
+    console.log('Logged in user customId:', user.customId); // ✅ debug
+
+    const token = jwt.sign(
+      { customId: user.customId },                    // ✅ sign with customId
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.json({ id: user.customId, email: user.email, token });
   } catch (err) {
     res.status(400).json({ error: 'Login failed' });
   }
 });
 
+// Get all workouts
 app.get('/api/workouts', async function(req, res) {
   const workouts = await Workout.find();
   const workoutsWithId = workouts.map(w => {
@@ -104,6 +123,7 @@ app.get('/api/workouts', async function(req, res) {
   res.json(workoutsWithId);
 });
 
+// Get workout by id
 app.get('/api/workouts/:id', async function(req, res) {
   const workout = await Workout.findById(req.params.id);
   if (!workout) return res.status(404).json({ error: 'Workout not found' });
@@ -114,25 +134,30 @@ app.get('/api/workouts/:id', async function(req, res) {
   res.json(workoutObj);
 });
 
+// Create workout
 app.post('/api/workouts', authMiddleware, async function(req, res) {
   try {
+    console.log('Creating workout with ownerId:', req.user.id); // ✅ debug
+
     const workout = new Workout({ ...req.body, ownerId: req.user.id });
-await workout.save();
+    await workout.save();
     const workoutObj = workout.toObject();
     workoutObj.id = workoutObj._id.toString();
     delete workoutObj._id;
     delete workoutObj.__v;
     res.status(201).json(workoutObj);
-    console.log('Created workout response:', workoutObj);
   } catch (err) {
     res.status(400).json({ error: 'Create failed' });
   }
 });
 
+// Update workout
 app.patch('/api/workouts/:id', authMiddleware, async function(req, res) {
   try {
     const workout = await Workout.findById(req.params.id);
-    if (!workout || workout.ownerId !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
+    if (!workout) return res.status(404).json({ error: 'Not found' });
+    if (workout.ownerId !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
+
     Object.assign(workout, req.body);
     await workout.save();
     const workoutObj = workout.toObject();
@@ -145,6 +170,7 @@ app.patch('/api/workouts/:id', authMiddleware, async function(req, res) {
   }
 });
 
+// Delete workout
 app.delete('/api/workouts/:id', authMiddleware, async (req, res) => {
   try {
     const workout = await Workout.findById(req.params.id);
@@ -153,11 +179,10 @@ app.delete('/api/workouts/:id', authMiddleware, async (req, res) => {
       return res.status(404).json({ error: 'Not found' });
     }
 
-    // 🔍 Add these two lines
-    console.log('workout.ownerId:', workout.ownerId, typeof workout.ownerId);
-    console.log('req.user.id:', req.user.id, typeof req.user.id);
+    console.log('workout.ownerId:', workout.ownerId); // ✅ debug
+    console.log('req.user.id    :', req.user.id);     // ✅ debug
 
-    if (workout.ownerId.toString() !== req.user.id.toString()) {
+    if (workout.ownerId !== req.user.id) {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
