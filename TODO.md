@@ -28,7 +28,11 @@ ng serve --proxy-config proxy.conf.json
 2. Login → dashboard/workouts
 3. Create/read workouts
 
+### 6. Fix Delete Button & Home Duplicates
+- Delete button in dashboard not working (backend ID mismatch?)
+- Home marquee shows intentional duplicate track but user sees "dvoino" (twice) issue
+
 ## Progress
 - [x] Step 1: Created proxy.conf.json ✅
-- [x] Step 2: Fixed workout.service.ts apiUrl ✅
+- [x] Step 2: Fixed workout.service.ts ✅
 
