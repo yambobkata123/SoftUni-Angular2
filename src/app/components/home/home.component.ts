@@ -16,6 +16,9 @@ import { scan, takeUntil, takeWhile } from 'rxjs/operators';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  trackByWorkout(index: number, workout: Workout): string {
+    return workout.id;
+  }
   workoutService = inject(WorkoutService);
   latestWorkouts$ = this.workoutService.getAll();
 
