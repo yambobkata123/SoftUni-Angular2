@@ -103,12 +103,13 @@ app.get('/api/workouts/:id', async function(req, res) {
 app.post('/api/workouts', authMiddleware, async function(req, res) {
   try {
     const workout = new Workout({ ...req.body, ownerId: req.user.id });
-    await workout.save();
+await workout.save();
     const workoutObj = workout.toObject();
     workoutObj.id = workoutObj._id.toString();
     delete workoutObj._id;
     delete workoutObj.__v;
     res.status(201).json(workoutObj);
+    console.log('Created workout response:', workoutObj);
   } catch (err) {
     res.status(400).json({ error: 'Create failed' });
   }

@@ -2,14 +2,14 @@
   <h1>My Dashboard</h1>
   <a routerLink="/create-workout" class="btn btn-primary">Create New Workout</a>
   <div class="workout-grid" *ngIf="myWorkouts$ | async as workouts; else empty">
-    <div class="workout-card" *ngFor="let workout of workouts">
+    <div class="workout-card" *ngFor="let workout of workouts; trackBy: trackByWorkout">
       <h3>{{workout.name}}</h3>
       <p>{{workout.description}}</p>
-<p>{{workout.difficulty | difficulty}} | {{workout.duration}} min | ID: {{workout.id || 'MISSING'}}</p>
+      <p>{{workout.difficulty | difficulty}} | {{workout.duration}} min | ID: {{workout.id || 'MISSING'}}</p>
       <div class="actions">
         <a routerLink="/workout/{{workout.id || ''}}" class="btn btn-primary">View</a>
         <a routerLink="/edit-workout/{{workout.id || ''}}" class="btn btn-warning">Edit</a>
-        <button class="btn btn-danger" (click)="deleteWorkout(workout.id!)">Delete</button>
+        <button class="btn btn-danger" (click)="deleteWorkout(workout.id!)">Delete {{workout.id?.substring(0,8) || 'NO ID'}}</button>
       </div>
     </div>
   </div>

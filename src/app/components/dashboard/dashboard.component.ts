@@ -6,8 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { Workout } from '../../models/workout';
 import { DifficultyPipe } from '../../pipes/difficulty.pipe';
 import { AsyncPipe } from '@angular/common';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +17,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  trackByWorkout(index: number, workout: any): string {
+    return workout.id || index.toString();
+  }
   private workoutService = inject(WorkoutService);
   private authService = inject(AuthService);
   myWorkouts$!: Observable<Workout[]>;
@@ -25,25 +28,36 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     const userId = this.authService.getCurrentUser()?.id || '';
     this.myWorkouts$ = this.workoutService.getAll().pipe(
+      tap(workouts => {
+        this.debugWorkouts = workouts;
+        console.log('Dashboard workouts:', workouts);
+      }),
       map(workouts => workouts.filter(w => w.ownerId === userId))
     );
   }
 
   deleteWorkout(id: string | undefined) {
+    console.log('Delete clicked, ID:', id);
     if (!id) {
       console.error('No ID for delete');
       return;
     }
-    if (confirm('Are you sure you want to delete this workout?')) {
+    if (confirm('Delete workout?')) {
+      // Optimistic remove - hide immediately, revert on error
+      const currentWorkouts = this.debugWorkouts.filter(w => w.id !== id);
+      const userId = this.authService.getCurrentUser()?.id || '';
+      this.myWorkouts$ = of(currentWorkouts.filter(w => w.ownerId === userId));
+      
       this.workoutService.delete(id).subscribe({
-        next: () => {
-          // Reload myWorkouts$ to reflect deletion
+        next: () => console.log('Server delete confirmed'),
+        error: (err) => {
+          console.error('Delete failed:', err);
+          // Revert on error
           const userId = this.authService.getCurrentUser()?.id || '';
           this.myWorkouts$ = this.workoutService.getAll().pipe(
             map(workouts => workouts.filter(w => w.ownerId === userId))
           );
-        },
-        error: (err) => console.error('Delete error:', err)
+        }
       });
     }
   }
