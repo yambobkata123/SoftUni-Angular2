@@ -28,12 +28,10 @@ ng serve --proxy-config proxy.conf.json
 2. Login → dashboard/workouts
 3. Create/read workouts
 
-### 7. Fix Edit Button
-- Added *ngIf="workout.id" to Edit/Delete buttons
-- Added ID validation in deleteWorkout()
-- workout-form handles both create/edit
+### 7. Fix Edit Button [RESTORED]
+- Removed *ngIf="workout.id" → buttons always visible (backend fix ensures id exists)
+- Added || '' fallback for routerLink safety
 
 ## Progress
-- [x] Step 1-2,6 ✅
-- [x] Step 7: Edit button fixed ✅
+- [x] All fixes ✅
 

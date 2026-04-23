@@ -7,9 +7,9 @@
       <p>{{workout.description}}</p>
       <p>{{workout.difficulty | difficulty}} | {{workout.duration}} min</p>
       <div class="actions">
-        <a routerLink="/workout/{{workout.id}}" class="btn btn-primary">View</a>
-        <a routerLink="/edit-workout/{{workout.id}}" class="btn btn-warning" *ngIf="workout.id">Edit</a>
-        <button class="btn btn-danger" (click)="deleteWorkout(workout.id!)" *ngIf="workout.id">Delete</button>
+        <a routerLink="/workout/{{workout.id || ''}}" class="btn btn-primary">View</a>
+        <a routerLink="/edit-workout/{{workout.id || ''}}" class="btn btn-warning">Edit</a>
+        <button class="btn btn-danger" (click)="deleteWorkout(workout.id!)">Delete</button>
       </div>
     </div>
   </div>
