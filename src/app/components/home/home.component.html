@@ -1,14 +1,55 @@
 <div class="home">
-  <h1>Fitness Tracker</h1>
-  <p>Welcome to your fitness journey! Browse workouts or login to create your own.</p>
+  <div class="particles">
+    <span class="particle p1"></span>
+    <span class="particle p2"></span>
+    <span class="particle p3"></span>
+    <span class="particle p4"></span>
+    <span class="particle p5"></span>
+    <span class="particle p6"></span>
+    <span class="particle p7"></span>
+    <span class="particle p8"></span>
+  </div>
+  <section class="hero">
+    <h1>Fitness Tracker</h1>
+    <p>🚀 Transform your body and mind with personalized workouts. Join thousands on their fitness journey today!</p>
+    <div class="stats">
+      <div class="stat">
+        <span class="counter">{{ totalWorkouts$ | async }}+ </span>
+        <span class="label">Premium Workouts</span>
+      </div>
+      <div class="stat">
+        <span class="counter">{{ activeUsers$ | async }}+ </span>
+        <span class="label">Active Users</span>
+      </div>
+    </div>
+    <div class="ctas">
+      <a routerLink="/register" class="cta primary">Start Free Trial 🚀</a>
+      <a routerLink="/catalog" class="cta secondary">Browse All Workouts 👀</a>
+    </div>
+  </section>
   <div class="featured" *ngIf="latestWorkouts$ | async as workouts; else loading">
     <h2>Featured Workouts</h2>
-    <div class="workout-grid">
-      <div class="workout-card" *ngFor="let workout of workouts.slice(0,3)">
-        <h3>{{workout.name}}</h3>
-        <p>{{workout.description}}</p>
-        <p>Duration: {{workout.duration}} min | {{workout.difficulty | difficulty}}</p>
-        <a routerLink="/workout/{{workout.id}}">View Details</a>
+    <div class="workout-marquee">
+      <div class="marquee-track">
+        <div class="workout-card" *ngFor="let workout of workouts.slice(0,5)">
+          <h3>{{workout.name}}</h3>
+          <p>{{workout.description}}</p>
+          <div class="workout-meta">
+            <span class="duration-badge">{{workout.duration}} min</span>
+            <span class="difficulty-badge difficulty-{{workout.difficulty | lowercase}}">{{workout.difficulty | titlecase}}</span>
+          </div>
+          <a routerLink="/workout/{{workout.id}}" class="view-btn">View Details →</a>
+        </div>
+        <!-- Duplicate for seamless infinite marquee -->
+        <div class="workout-card" *ngFor="let workout of workouts.slice(0,5)">
+          <h3>{{workout.name}}</h3>
+          <p>{{workout.description}}</p>
+          <div class="workout-meta">
+            <span class="duration-badge">{{workout.duration}} min</span>
+            <span class="difficulty-badge difficulty-{{workout.difficulty | lowercase}}">{{workout.difficulty | titlecase}}</span>
+          </div>
+          <a routerLink="/workout/{{workout.id}}" class="view-btn">View Details →</a>
+        </div>
       </div>
     </div>
   </div>
