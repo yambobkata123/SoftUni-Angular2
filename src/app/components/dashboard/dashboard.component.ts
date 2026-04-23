@@ -14,7 +14,7 @@ import { Observable, of } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterLink, DifficultyPipe, AsyncPipe],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
   trackByWorkout(index: number, workout: any): string {
@@ -28,37 +28,50 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     const userId = this.authService.getCurrentUser()?.id || '';
     this.myWorkouts$ = this.workoutService.getAll().pipe(
-      tap(workouts => {
+      tap((workouts) => {
         this.debugWorkouts = workouts;
         console.log('Dashboard workouts:', workouts);
       }),
-      map(workouts => workouts.filter(w => w.ownerId === userId))
+      map((workouts) => workouts.filter((w) => w.ownerId === userId)),
     );
   }
 
   deleteWorkout(id: string | undefined) {
     console.log('Delete clicked, ID:', id);
+
     if (!id) {
       console.error('No ID for delete');
       return;
     }
-    if (confirm('Delete workout?')) {
-      // Optimistic remove - hide immediately, revert on error
-      const currentWorkouts = this.debugWorkouts.filter(w => w.id !== id);
-      const userId = this.authService.getCurrentUser()?.id || '';
-      this.myWorkouts$ = of(currentWorkouts.filter(w => w.ownerId === userId));
-      
-      this.workoutService.delete(id).subscribe({
-        next: () => console.log('Server delete confirmed'),
-        error: (err) => {
-          console.error('Delete failed:', err);
-          // Revert on error
-          const userId = this.authService.getCurrentUser()?.id || '';
-          this.myWorkouts$ = this.workoutService.getAll().pipe(
-            map(workouts => workouts.filter(w => w.ownerId === userId))
-          );
-        }
-      });
+
+    if (!confirm('Delete workout?')) {
+      return;
     }
+
+    const userId = this.authService.getCurrentUser()?.id || '';
+
+    // Save current state for rollback
+    const previousWorkouts = [...this.debugWorkouts];
+
+    // Remove locally
+    this.debugWorkouts = this.debugWorkouts.filter((w) => w.id !== id);
+
+    // Update UI immediately
+    this.myWorkouts$ = of(this.debugWorkouts.filter((w) => w.ownerId === userId));
+
+    this.workoutService.delete(id).subscribe({
+      next: () => {
+        console.log('Server delete confirmed');
+      },
+
+      error: (err) => {
+        console.error('Delete failed:', err);
+
+        // Restore old data
+        this.debugWorkouts = previousWorkouts;
+
+        this.myWorkouts$ = of(this.debugWorkouts.filter((w) => w.ownerId === userId));
+      },
+    });
   }
 }
