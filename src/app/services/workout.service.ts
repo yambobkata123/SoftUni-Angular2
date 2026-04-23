@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class WorkoutService {
-  private apiUrl = 'http://localhost:3000/workouts';
+  private apiUrl = 'http://localhost:3001/api/workouts';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
