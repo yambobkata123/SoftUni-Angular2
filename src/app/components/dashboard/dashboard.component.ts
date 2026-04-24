@@ -52,11 +52,6 @@ export class DashboardComponent implements OnInit {
       return;
     }
   
-    // ← премахни confirm временно
-    // if (!confirm('Delete workout?')) {
-    //   return;
-    // }
-  
     const userId = this.authService.getCurrentUser()?.id || '';
     const previousWorkouts = [...this.debugWorkouts];
   
