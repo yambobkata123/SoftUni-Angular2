@@ -1,10 +1,21 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { catchError, finalize, of } from 'rxjs';
 import { Router } from '@angular/router';
+
+function allowedDomainValidator(control: AbstractControl): ValidationErrors | null {
+  const email = control.value as string;
+  if (!email) return null;
+  const allowedDomains = ['gmail.com', 'abv.bg', 'yahoo.com', 'outlook.com', 'mail.bg'];
+  const domain = email.split('@')[1]?.toLowerCase();
+  if (domain && !allowedDomains.includes(domain)) {
+    return { invalidDomain: true };
+  }
+  return null;
+}
 
 @Component({
   selector: 'app-register',
@@ -18,7 +29,7 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   registerForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, allowedDomainValidator]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
   loading = false;
