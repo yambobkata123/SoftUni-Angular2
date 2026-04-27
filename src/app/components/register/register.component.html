@@ -5,7 +5,7 @@
       <div class="form-group">
         <input id="email" formControlName="email" type="email" />
         <label for="email">Email Address</label>
-        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.dirty" class="error">
           <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
           <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
           <span *ngIf="registerForm.get('email')?.errors?.['invalidDomain']">Only emails from gmail.com, abv.bg, yahoo.com, outlook.com, mail.bg are allowed</span>
@@ -14,7 +14,7 @@
       <div class="form-group">
         <input id="password" formControlName="password" type="password" />
         <label for="password">Password</label>
-        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.dirty" class="error">
           Password must be at least 6 characters
         </div>
       </div>
